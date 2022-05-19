@@ -1,4 +1,5 @@
 defmodule OpentelemetrySentry.Propagator do
+  use Bitwise
   require OpenTelemetry.Tracer, as: Tracer
 
   @behaviour :otel_propagator_text_map
@@ -57,7 +58,7 @@ defmodule OpentelemetrySentry.Propagator do
 
   defp encode(span_ctx(trace_id: trace_id, span_id: span_id, trace_flags: trace_flags)) do
     sampled =
-      if Bitwise.band(trace_flags, 1) == 1 do
+      if band(trace_flags, 1) == 1 do
         "1"
       else
         "0"
