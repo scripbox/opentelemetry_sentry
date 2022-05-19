@@ -55,7 +55,7 @@ defmodule OpentelemetrySentry.Propagator do
 
   defp decode(_), do: :undefined
 
-  def encode(span_ctx(trace_id: trace_id, span_id: span_id, trace_flags: trace_flags)) do
+  defp encode(span_ctx(trace_id: trace_id, span_id: span_id, trace_flags: trace_flags)) do
     sampled =
       if Bitwise.band(trace_flags, 1) == 1 do
         "1"
@@ -73,16 +73,21 @@ defmodule OpentelemetrySentry.Propagator do
     )
   end
 
-  defp to_span_ctx(trace_id_string, span_id_string, sampled) do
+  defp to_span_ctx(trace_id_string, span_id_string, sampled) when sampled in ["0", "1"] do
     trace_flags =
       case sampled do
         "1" -> 1
         "0" -> 0
-        _ -> 0
       end
 
-    {trace_id, ""} = Integer.parse(trace_id_string, 16)
-    {span_id, ""} = Integer.parse(span_id_string, 16)
-    :otel_tracer.from_remote_span(trace_id, span_id, trace_flags)
+    with {trace_id, ""} <- Integer.parse(trace_id_string, 16),
+         {span_id, ""} <- Integer.parse(span_id_string, 16) do
+      :otel_tracer.from_remote_span(trace_id, span_id, trace_flags)
+    else
+      _ ->
+        :undefined
+    end
   end
+
+  defp to_span_ctx(_, _, _), do: :undefined
 end
