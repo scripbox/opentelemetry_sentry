@@ -1,0 +1,3 @@
+%{
+  "opentelemetry_api": {:hex, :opentelemetry_api, "1.0.3", "77f9644c42340cd8b18c728cde4822ed55ae136f0d07761b78e8c54da46af93a", [:mix, :rebar3], [], "hexpm", "4293e06bd369bc004e6fad5edbb56456d891f14bd3f9f1772b18f1923e0678ea"},
+}
