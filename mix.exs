@@ -1,7 +1,7 @@
 defmodule OpentelemetrySentry.MixProject do
   use Mix.Project
 
-  @source_url "https://github.com/scripbox/opentelemetry_exq"
+  @source_url "https://github.com/scripbox/opentelemetry_sentry"
   @version "0.1.0"
 
   def project do
